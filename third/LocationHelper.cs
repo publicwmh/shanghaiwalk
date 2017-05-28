@@ -6,7 +6,7 @@ namespace shanghaiwalk.third
 		string ak;
 		public LocationHelper()
 		{
-			ak = ConfigurationManager.AppSettings["baiduKey"];
+			//ak = ConfigurationManager.AppSettings["baiduKey"];
 			
 		}
 		

@@ -1,0 +1,22 @@
+﻿#!/bin/sh
+
+# script/builds - builds the release
+
+# exit on sub-module failure
+set -e
+
+cd "$(dirname "$0")/.."
+
+# ------
+
+sh script/restore
+
+# ------
+
+echo "Testing..."
+export ASPNETCORE_ENVIRONMENT=test
+# dotnet test
+
+echo "Done testing!"
+
+# ------

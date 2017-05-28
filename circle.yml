@@ -1,0 +1,29 @@
+﻿machine:
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  pre:
+    - mkdir -p ~/docker;
+    - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+    - sudo apt-get update
+    - sudo sudo apt-get install dotnet-dev-1.0.4
+
+test:
+  override:
+    - sh script/test
+    - if [[ -e test-results.xml ]]; then cp test-results.xml $CIRCLE_TEST_REPORTS/test-results.xml; fi
+  post:
+    - sh script/build
+    - cp -R test01/bin/Release/netcoreapp1.1/ $CIRCLE_ARTIFACTS/
+deployment:
+  master:
+    branch: master
+    commands:
+      - sh script/publish-dockerhub 
+#notify:
+#  webhooks:
+#    - url：http://

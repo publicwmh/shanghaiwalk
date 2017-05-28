@@ -1,0 +1,22 @@
+﻿
+#!/bin/sh
+
+# script/builds - builds the release
+
+# exit on sub-module failure
+set -e
+
+cd "$(dirname "$0")/.."
+
+# ------
+
+echo "Publishing Docker Hub..."
+
+docker build --rm=false  -t registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai .
+docker login -u $DOCKER_USER  -p $DOCKER_PASSWORD  -e $DOCKER_EMAIL 
+docker tag registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:1.0.$CIRCLE_BUILD_NUM
+docker push registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai
+
+echo "Done publishing!"
+
+# ------
