@@ -10,7 +10,7 @@
     <Folder Include="third\" />
     <Folder Include="model\" />
     <Folder Include="Baiye\" />
-    <Folder Include="scripts\" />
+    <Folder Include="script\" />
   </ItemGroup>
 
   <ItemGroup>
