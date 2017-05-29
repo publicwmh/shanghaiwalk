@@ -20,7 +20,9 @@ jobs:
             mv /tmp/docker/* /usr/bin
 
       # build and push Docker image
-      - run: |
+      - run: 
+          name: push to registry
+          command: |
           TAG=1.0.$CIRCLE_BUILD_NUM
           docker build --rm=false  -t kwok/wkshanghai:$TAG .
           docker login -u $DOCKER_USER  -p $DOCKER_PASSWORD  -e $DOCKER_EMAIL  registry.cn-hangzhou.aliyuncs.com
