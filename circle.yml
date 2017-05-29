@@ -1,4 +1,5 @@
-﻿jobs:
+﻿version: 2.0
+jobs:
   build:
     docker:
       - image: microsoft/aspnetcore-build:1.1.2
