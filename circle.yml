@@ -23,11 +23,11 @@ jobs:
       - run: 
           name: push to registry
           command: |
-          TAG=1.0.$CIRCLE_BUILD_NUM
-          docker build --rm=false  -t kwok/wkshanghai:$TAG .
-          docker login -u $DOCKER_USER  -p $DOCKER_PASSWORD  -e $DOCKER_EMAIL  registry.cn-hangzhou.aliyuncs.com
-          docker tag kwok/wkshanghai:$TAG registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:$TAG
-          docker push registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:$TAG
+            TAG=1.0.$CIRCLE_BUILD_NUM
+            docker build --rm=false  -t kwok/wkshanghai:$TAG .
+            docker login -u $DOCKER_USER  -p $DOCKER_PASSWORD  -e $DOCKER_EMAIL  registry.cn-hangzhou.aliyuncs.com
+            docker tag kwok/wkshanghai:$TAG registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:$TAG
+            docker push registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:$TAG
 
 
 #notify:
