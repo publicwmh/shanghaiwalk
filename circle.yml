@@ -14,7 +14,7 @@ jobs:
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "shanghaiwalk.csproj" }}
           paths:
-            - ".nuget/packages"
+            - "/root/.nuget/packages"
       - setup_remote_docker
       - run:
           name: Install Docker client
