@@ -27,6 +27,9 @@ namespace shanghaiwalk
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+
+            services.Configure<option.WeixinOption>(Configuration);
             // Add framework services.
             services.AddMvc();
         }
@@ -37,7 +40,11 @@ namespace shanghaiwalk
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMvc();
+            app.UseMvc(routes =>{
+				routes.MapRoute(
+	            name: "default",
+	            template: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }

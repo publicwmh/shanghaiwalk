@@ -11,6 +11,8 @@
     <Folder Include="model\" />
     <Folder Include="Baiye\" />
     <Folder Include="script\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="option\" />
   </ItemGroup>
 
   <ItemGroup>
