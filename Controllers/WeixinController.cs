@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.Entities.Request;
+using shanghaiwalk.Baiye;
 using shanghaiwalk.option;
+using shanghaiwalk.weixin;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,14 +17,19 @@ namespace shanghaiwalk.Controllers
     public class WeixinController : Controller
     {
         private readonly WeixinOption weixinoption;
-        public WeixinController(IOptions<WeixinOption> optweixin)
+        private readonly OssOption ossOption;
+        private readonly BaiduApiOption baiduapiOption;
+        public WeixinController(IOptions<WeixinOption> optweixin,IOptions<OssOption> optoss,IOptions<BaiduApiOption> optbaidu)
         {
             weixinoption = optweixin.Value;
+            ossOption = optoss.Value;
+            baiduapiOption = optbaidu.Value;
         }
 		[HttpGet]
 		[ActionName("Test")]
-        public WeixinOption Test(){
-            return weixinoption;
+        public BaiYeMapItem Test(string loc){
+            BaiYeMapService service = new BaiYeMapService(ossOption,baiduapiOption);
+            return service.GetMapInfo("绍兴路", false);
         }
        
 		/// <summary>
@@ -61,11 +68,11 @@ namespace shanghaiwalk.Controllers
             postModel.EncodingAESKey = weixinoption.WeixinAESKey;//根据自己后台的设置保持一致
             postModel.AppId = weixinoption.AppId;//根据自己后台的设置保持一致
 
-            //var messageHandler = new WeixinMessageHandler(Request.InputStream, postModel);//接收消息（第一步）
+            var messageHandler = new WeixinMessageHandler(this.Request.Body,postModel,ossOption,baiduapiOption);//接收消息（第一步）
 
-            //messageHandler.Execute();//执行微信处理过程（第二步）
-            return null;
-			//return new FixWeixinBugWeixinResult(messageHandler);//返回（第三步）
+            messageHandler.Execute();//执行微信处理过程（第二步）
+           
+			return new FixWeixinBugWeixinResult(messageHandler);//返回（第三步）
 
 		}
     }

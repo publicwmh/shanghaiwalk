@@ -1,13 +1,14 @@
 ﻿using System;
+using shanghaiwalk.option;
+
 namespace shanghaiwalk.third
 {
 	public class LocationHelper
 	{
 		string ak;
-		public LocationHelper()
+		public LocationHelper(BaiduApiOption baiduapioption)
 		{
-			//ak = ConfigurationManager.AppSettings["baiduKey"];
-			
+            ak = baiduapioption.Tk;
 		}
 		
 
@@ -15,8 +16,7 @@ namespace shanghaiwalk.third
 		{
 			BaiduLocation re = new BaiduLocation();
 			var request = new BaiduGeocodingRequest();
-			request.address = addr;
-
+            request.address = addr;
 			request.ak = ak;
 			var response = GeocodingService.GetBaiduResponse(request);
 

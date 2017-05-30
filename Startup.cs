@@ -30,6 +30,8 @@ namespace shanghaiwalk
             services.AddOptions();
 
             services.Configure<option.WeixinOption>(Configuration);
+            services.Configure<option.OssOption>(Configuration.GetSection("Oss"));
+            services.Configure<option.BaiduApiOption>(Configuration.GetSection("BaiduApi"));
             // Add framework services.
             services.AddMvc();
         }

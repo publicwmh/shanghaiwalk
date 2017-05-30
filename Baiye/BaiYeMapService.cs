@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using Microsoft.AspNetCore.Aliyun.OSS;
 using shanghaiwalk.model;
+using shanghaiwalk.option;
 using shanghaiwalk.third;
 
 namespace shanghaiwalk.Baiye
@@ -12,34 +14,39 @@ namespace shanghaiwalk.Baiye
 	public class BaiYeMapService
 	{
 		public static IDictionary<string, IList<PointF>> Paths;
+        public OssClient client;
+        static LocationHelper helper;
 
-		public BaiYeMapService()
+		public BaiYeMapService(OssOption ossoption,BaiduApiOption baiduapiOption)
 		{
+            helper = new LocationHelper(baiduapiOption);
+            client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
+
 			if (Paths == null)
 			{
 				Paths = new Dictionary<string, IList<PointF>>();
 				//获取所有记录
-				              ISession session = NHibernateHelper.OpenSession();
-				              var list = session.QueryOver<baiye>().List<baiye>();
-				              foreach (BaiyeBookPage item in list)
-				              {
-				                  if (!string.IsNullOrEmpty(item.Page) && item.Ld1.HasValue)
-				                  {
-				                      IList<PointF> p = new List<PointF>();
+				              //ISession session = NHibernateHelper.OpenSession();
+				              //var list = session.QueryOver<baiye>().List<baiye>();
+				              //foreach (BaiyeBookPage item in list)
+				              //{
+				              //    if (!string.IsNullOrEmpty(item.Page) && item.Ld1.HasValue)
+				              //    {
+				              //        IList<PointF> p = new List<PointF>();
 				
-				                      var p1 = new PointF((float)item.Lu1.Value, (float)item.Lu2.Value);
-				                      var p2 = new PointF((float)item.Ru1.Value, (float)item.Ru2.Value);
-				                      var p3 = new PointF((float)item.Rd1.Value, (float)item.Rd2.Value);
-				                      var p4 = new PointF((float)item.Ld1.Value, (float)item.Ld2.Value);
-				                      p.Add(p1);
-				                      p.Add(p2);
-				                      p.Add(p3);
-				                      p.Add(p4);
-				                      Paths.Add(new KeyValuePair<string, IList<PointF>>(item.Page, p));
+				              //        var p1 = new PointF((float)item.Lu1.Value, (float)item.Lu2.Value);
+				              //        var p2 = new PointF((float)item.Ru1.Value, (float)item.Ru2.Value);
+				              //        var p3 = new PointF((float)item.Rd1.Value, (float)item.Rd2.Value);
+				              //        var p4 = new PointF((float)item.Ld1.Value, (float)item.Ld2.Value);
+				              //        p.Add(p1);
+				              //        p.Add(p2);
+				              //        p.Add(p3);
+				              //        p.Add(p4);
+				              //        Paths.Add(new KeyValuePair<string, IList<PointF>>(item.Page, p));
 				
-				                  }
+				              //    }
 				
-				              }
+				              //}
 			}
 		}
 
@@ -157,16 +164,10 @@ namespace shanghaiwalk.Baiye
 			double rad = 6371; //Earth radius in Km
 
 			//Convert to radians
-
 			double p1X = from.X / 180 * Math.PI;
-
 			double p1Y = from.Y / 180 * Math.PI;
-
 			double p2X = to.X / 180 * Math.PI;
-
 			double p2Y = to.Y / 180 * Math.PI;
-
-
 
 			return Math.Acos(Math.Sin(p1Y) * Math.Sin(p2Y) +
 
@@ -257,7 +258,7 @@ namespace shanghaiwalk.Baiye
 			return (cnt % 2 > 0) ? true : false;
 		}
 
-		static LocationHelper helper = new LocationHelper();
+		
 
 		public BaiYeMapItem GetMapInfo(string adr, bool usehpic)
 		{
@@ -290,41 +291,41 @@ namespace shanghaiwalk.Baiye
 			}
 
 			string ext = ".jpg";
-			long picq = 10l;
+			long picq = 10L;
 			if (mapname.Contains("上册"))
 			{
 				ext = ".jpeg";
-				picq = 50l;
+				picq = 50L;
 			}
 			if (usehpic)
 			{
-				picq = 80l;
+				picq = 80L;
 			}
-            var image = System.Drawing.Image.FromStream(HttpContext.Current.Server.MapPath("~/Map/" + mapname + ext));
+            //var image = System.Drawing.Image.FromStream(HttpContext.Current.Server.MapPath("~/Map/" + mapname + ext));
 			Bitmap bmp = null;
-			if (xx == 1)
-			{
-				bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
+			//if (xx == 1)
+			//{
+			//	bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
 
-			}
-			else if (xx == 2)
-			{
-				bmp = Cut(image, image.Width / 2, 0, image.Width / 2, image.Height);
-			}
-			else if (xx == 3)
-			{
-				bmp = Cut(image, image.Width / 2, 0, image.Width / 2, image.Height);
-			}
-			else if (xx == 4)
-			{
-				bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
-			}
-			else
-			{
-				return null;
-			}
+			//}
+			//else if (xx == 2)
+			//{
+			//	bmp = Cut(image, image.Width / 2, 0, image.Width / 2, image.Height);
+			//}
+			//else if (xx == 3)
+			//{
+			//	bmp = Cut(image, image.Width / 2, 0, image.Width / 2, image.Height);
+			//}
+			//else if (xx == 4)
+			//{
+			//	bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
+			//}
+			//else
+			//{
+			//	return null;
+			//}
 			string fn = "tmppic/" + Guid.NewGuid().ToString() + ext;
-			string filen = HttpContext.Current.Server.MapPath("~/" + fn);
+			//string filen = HttpContext.Current.Server.MapPath("~/" + fn);
 			ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
 			ImageCodecInfo ici = null;
 			foreach (ImageCodecInfo codec in codecs)
@@ -334,7 +335,7 @@ namespace shanghaiwalk.Baiye
 			}
 			using (MemoryStream memory = new MemoryStream())
 			{
-				using (FileStream fs = new FileStream(filen, FileMode.Create, FileAccess.ReadWrite))
+				//using (FileStream fs = new FileStream(filen, FileMode.Create, FileAccess.ReadWrite))
 				{
 					var myEncoderParameters = new EncoderParameters(1);
 
@@ -342,7 +343,7 @@ namespace shanghaiwalk.Baiye
 					myEncoderParameters.Param[0] = myEncoderParameter;
 					bmp.Save(memory, ici, myEncoderParameters);
 					byte[] bytes = memory.ToArray();
-					fs.Write(bytes, 0, bytes.Length);
+					//fs.Write(bytes, 0, bytes.Length);
 				}
 			}
 			string url = "";

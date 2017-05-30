@@ -22,6 +22,7 @@
 	<PackageReference Include="Senparc.Weixin.MP" Version="14.4.7" />
 	<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.2" />
 	<PackageReference Include="CaptchaGen.NetCore" Version="1.0.2" />
+	<PackageReference Include="Microsoft.AspNetCore.Aliyun.OSS" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
