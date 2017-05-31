@@ -16,10 +16,12 @@ namespace shanghaiwalk.Baiye
 		public static IDictionary<string, IList<PointF>> Paths;
         public OssClient client;
         static LocationHelper helper;
+        private BaiYeContext _baiyecontext;
 
-		public BaiYeMapService(OssOption ossoption,BaiduApiOption baiduapiOption)
+        public BaiYeMapService(OssOption ossoption,BaiduApiOption baiduapiOption,BaiYeContext baiyecontext)
 		{
             helper = new LocationHelper(baiduapiOption);
+            _baiyecontext = baiyecontext;
             client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
 
 			if (Paths == null)
@@ -160,9 +162,7 @@ namespace shanghaiwalk.Baiye
 		/// <param name="to">To.</param>
 		private double CalcDistance(PointF from, PointF to)
 		{
-
 			double rad = 6371; //Earth radius in Km
-
 			//Convert to radians
 			double p1X = from.X / 180 * Math.PI;
 			double p1Y = from.Y / 180 * Math.PI;
@@ -177,14 +177,13 @@ namespace shanghaiwalk.Baiye
 
 		public string FindMap(double x, double y, out int xxv)
 		{
-			var t = new List<BaiyeBookPage>();
-			//var t=  session.QueryOver<baiye>().Where(p => p.x1 > x && p.x2 < x && p.y1 < y && p.y2 > y).List();
+            var t=  _baiyecontext.BaiYeBookPages.Where(p => p.x1 > x && p.x2 < x && p.y1 < y && p.y2 > y).ToList();
 			IList<JudeItem> ts = new List<JudeItem>();
 			foreach (var item in t)
 			{
 				JudeItem it = new JudeItem()
 				{
-					key = item.Page
+					key = item.page
 				};
 				//center1
 				var point = new PointF((float)x, (float)y);

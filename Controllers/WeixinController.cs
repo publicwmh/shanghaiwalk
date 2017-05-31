@@ -19,16 +19,21 @@ namespace shanghaiwalk.Controllers
         private readonly WeixinOption weixinoption;
         private readonly OssOption ossOption;
         private readonly BaiduApiOption baiduapiOption;
-        public WeixinController(IOptions<WeixinOption> optweixin,IOptions<OssOption> optoss,IOptions<BaiduApiOption> optbaidu)
+        private readonly BaiYeContext _baiyecontext;
+        public WeixinController(IOptions<WeixinOption> optweixin,
+                                IOptions<OssOption> optoss,
+                                IOptions<BaiduApiOption> optbaidu,
+                               BaiYeContext baiyecontext)
         {
             weixinoption = optweixin.Value;
             ossOption = optoss.Value;
             baiduapiOption = optbaidu.Value;
+            _baiyecontext = baiyecontext;
         }
 		[HttpGet]
 		[ActionName("Test")]
         public BaiYeMapItem Test(string loc){
-            BaiYeMapService service = new BaiYeMapService(ossOption,baiduapiOption);
+            BaiYeMapService service = new BaiYeMapService(ossOption,baiduapiOption,_baiyecontext);
             return service.GetMapInfo("绍兴路", false);
         }
        
@@ -68,7 +73,7 @@ namespace shanghaiwalk.Controllers
             postModel.EncodingAESKey = weixinoption.WeixinAESKey;//根据自己后台的设置保持一致
             postModel.AppId = weixinoption.AppId;//根据自己后台的设置保持一致
 
-            var messageHandler = new WeixinMessageHandler(this.Request.Body,postModel,ossOption,baiduapiOption);//接收消息（第一步）
+            var messageHandler = new WeixinMessageHandler(this.Request.Body,postModel,ossOption,baiduapiOption,_baiyecontext);//接收消息（第一步）
 
             messageHandler.Execute();//执行微信处理过程（第二步）
            
