@@ -21,9 +21,12 @@ namespace shanghaiwalk.weixin
     {
 
 
-        public WeixinMessageHandler(Stream input,PostModel post,OssOption ossoption,BaiduApiOption baiduapiOption):base(input,post)
+        public WeixinMessageHandler(Stream input,PostModel post,
+                                    OssOption ossoption,
+                                    BaiduApiOption baiduapiOption,
+                                    BaiYeContext baiyecontext):base(input,post)
         {
-            service = new BaiYeMapService(ossoption,baiduapiOption);
+            service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext);
         }
 
         private BaiYeMapService service;

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace shanghaiwalk
 {
@@ -32,8 +29,12 @@ namespace shanghaiwalk
             services.Configure<option.WeixinOption>(Configuration);
             services.Configure<option.OssOption>(Configuration.GetSection("Oss"));
             services.Configure<option.BaiduApiOption>(Configuration.GetSection("BaiduApi"));
-            // Add framework services.
-            services.AddMvc();
+
+            services.AddDbContext<BaiYeContext>(options =>
+		     options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+			// Add framework services.
+			services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
