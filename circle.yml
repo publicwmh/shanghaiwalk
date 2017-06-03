@@ -7,12 +7,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "shanghaiwalk.csproj" }}
+          key: deps1-{{ .Branch }}-{{ checksum "shanghaiwalk/shanghaiwalk.csproj" }}
       - run: |
           sh script/restore
           sh script/build 
       - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "shanghaiwalk.csproj" }}
+          key: deps1-{{ .Branch }}-{{ checksum "shanghaiwalk/shanghaiwalk.csproj" }}
           paths:
             - "/root/.nuget/packages"
       - setup_remote_docker
