@@ -9,6 +9,7 @@ using Senparc.Weixin.MP.Entities.Request;
 using shanghaiwalk.Baiye;
 using shanghaiwalk.option;
 using shanghaiwalk.weixin;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -73,11 +74,18 @@ namespace shanghaiwalk.Controllers
             postModel.EncodingAESKey = weixinoption.WeixinAESKey;//根据自己后台的设置保持一致
             postModel.AppId = weixinoption.AppId;//根据自己后台的设置保持一致
 
-            var messageHandler = new WeixinMessageHandler(this.Request.Body,postModel,ossOption,baiduapiOption,_baiyecontext);//接收消息（第一步）
+            //转化steam 为memory stream
+            using (MemoryStream memory = new MemoryStream())
+            {
+                this.Request.Body.CopyTo(memory);
+                var messageHandler = new WeixinMessageHandler(memory, postModel, ossOption, baiduapiOption, _baiyecontext);//接收消息（第一步）
 
-            messageHandler.Execute();//执行微信处理过程（第二步）
-           
-			return new FixWeixinBugWeixinResult(messageHandler);//返回（第三步）
+                messageHandler.Execute();//执行微信处理过程（第二步）
+                
+                return new FixWeixinBugWeixinResult(messageHandler);//返回（第三步）
+
+            }
+
 
 		}
     }
