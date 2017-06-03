@@ -12,6 +12,7 @@ using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.MessageHandlers;
 using shanghaiwalk.Baiye;
 using shanghaiwalk.option;
+using System.Xml.Linq;
 
 namespace shanghaiwalk.weixin
 {
@@ -21,7 +22,7 @@ namespace shanghaiwalk.weixin
     {
 
 
-        public WeixinMessageHandler(Stream input,PostModel post,
+        public WeixinMessageHandler(XDocument input,PostModel post,
                                     OssOption ossoption,
                                     BaiduApiOption baiduapiOption,
                                     BaiYeContext baiyecontext):base(input,post)

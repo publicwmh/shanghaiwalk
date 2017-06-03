@@ -12,7 +12,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0-preview1-final" />
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
-    <PackageReference Include="Senparc.Weixin.MP" Version="14.4.7" />
+    <PackageReference Include="Senparc.Weixin.MP.netcore2pre" Version="1.0.0" />
+    <PackageReference Include="Senparc.Weixin.netcore2pre" Version="1.0.0" />
     <PackageReference Include="aliyun-oss-netcore" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0-preview1-final" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0-preview1" />

@@ -10,6 +10,7 @@ using shanghaiwalk.Baiye;
 using shanghaiwalk.option;
 using shanghaiwalk.weixin;
 using System.IO;
+using Senparc.Weixin.XmlUtility;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -78,7 +79,9 @@ namespace shanghaiwalk.Controllers
             using (MemoryStream memory = new MemoryStream())
             {
                 this.Request.Body.CopyTo(memory);
-                var messageHandler = new WeixinMessageHandler(memory, postModel, ossOption, baiduapiOption, _baiyecontext);//接收消息（第一步）
+                memory.Seek(0, SeekOrigin.Begin);
+                var postDataDocument = XmlUtility.Convert(memory);
+                var messageHandler = new WeixinMessageHandler(postDataDocument, postModel, ossOption, baiduapiOption, _baiyecontext);//接收消息（第一步）
 
                 messageHandler.Execute();//执行微信处理过程（第二步）
                 
