@@ -17,11 +17,13 @@ namespace shanghaiwalk.Baiye
         public OssClient client;
         static LocationHelper helper;
         private OssOption _ossoption;
-
-        public BaiYeMapService(OssOption ossoption, BaiduApiOption baiduapiOption)
+        private BaiYeContext _baiyecontext;
+        
+        public BaiYeMapService(OssOption ossoption, BaiduApiOption baiduapiOption, BaiYeContext baiyecontent)
         {
             helper = new LocationHelper(baiduapiOption);
             _ossoption = ossoption;
+            _baiyecontext = baiyecontent;
             client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
 
             if (Paths == null)
@@ -179,14 +181,14 @@ namespace shanghaiwalk.Baiye
 
         public string FindMap(double x, double y, out int xxv)
         {
-            var t = new List<BaiyeBookPage>();
-            //var t=  session.QueryOver<baiye>().Where(p => p.x1 > x && p.x2 < x && p.y1 < y && p.y2 > y).List();
+           
+            var t=  _baiyecontext.BaiYeBookPages.Where(p => p.x1 > x && p.x2 < x && p.y1 < y && p.y2 > y).ToList();
             IList<JudeItem> ts = new List<JudeItem>();
             foreach (var item in t)
             {
                 JudeItem it = new JudeItem()
                 {
-                    key = item.Page
+                    key = item.page
                 };
                 //center1
                 var point = new PointF((float)x, (float)y);
@@ -286,11 +288,10 @@ namespace shanghaiwalk.Baiye
         {
             int xx = 0;
             var mapname = FindMap(y, x, out xx);
-            //hack
-            //if (string.IsNullOrEmpty(mapname))
-            //{
-            //    return null;
-            //}
+            if (string.IsNullOrEmpty(mapname))
+            {
+                return null;
+            }
 
             string ext = ".jpg";
             long picq = 10L;
@@ -306,11 +307,9 @@ namespace shanghaiwalk.Baiye
             mapname = "100";
             //download file
             var fileobject = client.GetObject(_ossoption.BucketName, "MapData/" + mapname + ext);
-            //var image = System.Drawing.Image.FromStream(HttpContext.Current.Server.MapPath("~/Map/" + mapname + ext));
+           
             var image = Image.FromStream(fileobject.Content);
             Bitmap bmp = null;
-            //hack
-            xx = 1;
             if (xx == 1)
             {
                 bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
