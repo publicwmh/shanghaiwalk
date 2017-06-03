@@ -1,4 +1,8 @@
 ﻿version: 2.0
+general:
+  branches:
+    only:
+      - master 
 jobs:
   build:
     working_directory: ~/wksh
