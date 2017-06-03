@@ -13,7 +13,7 @@ namespace shanghaiwalk.Baiye
 {
     public class BaiYeMapService
     {
-        public static IDictionary<string, IList<PointF>> Paths;
+      
         public OssClient client;
         static LocationHelper helper;
         private OssOption _ossoption;
@@ -25,33 +25,6 @@ namespace shanghaiwalk.Baiye
             _ossoption = ossoption;
             _baiyecontext = baiyecontent;
             client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
-
-            if (Paths == null)
-            {
-                Paths = new Dictionary<string, IList<PointF>>();
-                //获取所有记录
-                //ISession session = NHibernateHelper.OpenSession();
-                //var list = session.QueryOver<baiye>().List<baiye>();
-                //foreach (BaiyeBookPage item in list)
-                //{
-                //    if (!string.IsNullOrEmpty(item.Page) && item.Ld1.HasValue)
-                //    {
-                //        IList<PointF> p = new List<PointF>();
-
-                //        var p1 = new PointF((float)item.Lu1.Value, (float)item.Lu2.Value);
-                //        var p2 = new PointF((float)item.Ru1.Value, (float)item.Ru2.Value);
-                //        var p3 = new PointF((float)item.Rd1.Value, (float)item.Rd2.Value);
-                //        var p4 = new PointF((float)item.Ld1.Value, (float)item.Ld2.Value);
-                //        p.Add(p1);
-                //        p.Add(p2);
-                //        p.Add(p3);
-                //        p.Add(p4);
-                //        Paths.Add(new KeyValuePair<string, IList<PointF>>(item.Page, p));
-
-                //    }
-
-                //}
-            }
         }
 
         /// <summary>
@@ -164,9 +137,7 @@ namespace shanghaiwalk.Baiye
         /// <param name="to">To.</param>
         private double CalcDistance(PointF from, PointF to)
         {
-
             double rad = 6371; //Earth radius in Km
-
             //Convert to radians
             double p1X = from.X / 180 * Math.PI;
             double p1Y = from.Y / 180 * Math.PI;
@@ -225,44 +196,7 @@ namespace shanghaiwalk.Baiye
 
             }
         }
-        /// <summary>
-        /// 高斯投影中所选用的参考椭球
-        /// </summary>
-        public enum GaussSphere
-        {
-            Beijing54,
-            Xian80,
-            WGS84,
-        }
-        public static double DistanceOfTwoPoints(double lng1, double lat1, double lng2, double lat2, GaussSphere gs)
-        {
-            double radLat1 = Rad(lat1);
-            double radLat2 = Rad(lat2);
-            double a = radLat1 - radLat2;
-            double b = Rad(lng1) - Rad(lng2);
-            double s = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin(a / 2), 2) +
-                Math.Cos(radLat1) * Math.Cos(radLat2) * Math.Pow(Math.Sin(b / 2), 2)));
-            s = s * (gs == GaussSphere.WGS84 ? 6378137.0 : (gs == GaussSphere.Xian80 ? 6378140.0 : 6378245.0));
-            s = Math.Round(s * 10000) / 10000;
-            return s;
-        }
-
-        private static double Rad(double d)
-        {
-            return d * Math.PI / 180.0;
-        }
-        private bool PointInFences(PointF pnt1, PointF[] fencePnts)
-        {
-            int j = 0, cnt = 0;
-            for (int i = 0; i < fencePnts.Length; i++)
-            {
-                j = (i == fencePnts.Length - 1) ? 0 : j + 1;
-                if ((fencePnts[i].Y != fencePnts[j].Y) && (((pnt1.Y >= fencePnts[i].Y) && (pnt1.Y < fencePnts[j].Y)) || ((pnt1.Y >= fencePnts[j].Y) && (pnt1.Y < fencePnts[i].Y))) && (pnt1.X < (fencePnts[j].X - fencePnts[i].X) * (pnt1.Y - fencePnts[i].Y) / (fencePnts[j].Y - fencePnts[i].Y) + fencePnts[i].X)) cnt++;
-            }
-            return (cnt % 2 > 0) ? true : false;
-        }
-
-
+  
 
         public BaiYeMapItem GetMapInfo(string adr, bool usehpic)
         {
@@ -304,7 +238,7 @@ namespace shanghaiwalk.Baiye
             {
                 picq = 80L;
             }
-            mapname = "100";
+            
             //download file
             var fileobject = client.GetObject(_ossoption.BucketName, "MapData/" + mapname + ext);
            
