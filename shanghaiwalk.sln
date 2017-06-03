@@ -1,7 +1,24 @@
-
-Microsoft Visual Studio Solution File, Format Version 15.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shanghaiwalk", "shanghaiwalk.csproj", "{93425A3D-4FB6-4559-A162-43DE0DC31960}"
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26510.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shanghaiwalk", "shanghaiwalk\shanghaiwalk.csproj", "{B7D5E533-D912-4B47-901F-9720514841C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Items", "Items", "{B9BC75B7-2198-4A59-A762-82D5C9975076}"
+	ProjectSection(SolutionItems) = preProject
+		circle.yml = circle.yml
+		Dockerfile = Dockerfile
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{5A9AA85C-4744-4664-B702-10699522396C}"
+	ProjectSection(SolutionItems) = preProject
+		script\build = script\build
+		script\publish-dockerhub = script\publish-dockerhub
+		script\restore = script\restore
+		script\test = script\test
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +26,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{93425A3D-4FB6-4559-A162-43DE0DC31960}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93425A3D-4FB6-4559-A162-43DE0DC31960}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93425A3D-4FB6-4559-A162-43DE0DC31960}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93425A3D-4FB6-4559-A162-43DE0DC31960}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7D5E533-D912-4B47-901F-9720514841C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D5E533-D912-4B47-901F-9720514841C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D5E533-D912-4B47-901F-9720514841C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D5E533-D912-4B47-901F-9720514841C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5A9AA85C-4744-4664-B702-10699522396C} = {B9BC75B7-2198-4A59-A762-82D5C9975076}
 	EndGlobalSection
 EndGlobal

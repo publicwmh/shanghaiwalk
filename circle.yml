@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/wksh
     docker:
-      - image: microsoft/aspnetcore-build:1.1.2
+      - image: microsoft/aspnetcore-build:2.0.0-preview1
     steps:
       - checkout
       - restore_cache:
