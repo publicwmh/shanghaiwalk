@@ -286,11 +286,11 @@ namespace shanghaiwalk.Baiye
         {
             int xx = 0;
             var mapname = FindMap(y, x, out xx);
-
-            if (string.IsNullOrEmpty(mapname))
-            {
-                return null;
-            }
+            //hack
+            //if (string.IsNullOrEmpty(mapname))
+            //{
+            //    return null;
+            //}
 
             string ext = ".jpg";
             long picq = 10L;
@@ -309,6 +309,8 @@ namespace shanghaiwalk.Baiye
             //var image = System.Drawing.Image.FromStream(HttpContext.Current.Server.MapPath("~/Map/" + mapname + ext));
             var image = Image.FromStream(fileobject.Content);
             Bitmap bmp = null;
+            //hack
+            xx = 1;
             if (xx == 1)
             {
                 bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
