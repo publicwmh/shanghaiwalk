@@ -13,6 +13,7 @@ using Senparc.Weixin.MP.MessageHandlers;
 using shanghaiwalk.Baiye;
 using shanghaiwalk.option;
 using System.Xml.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace shanghaiwalk.weixin
 {
@@ -20,18 +21,19 @@ namespace shanghaiwalk.weixin
     /// 此方法中所有过程，都基于Senparc.Weixin.MP的基础功能，只为简化代码而设。
     public class WeixinMessageHandler : MessageHandler<MessageContext<IRequestMessageBase, IResponseMessageBase>>
     {
-
+        private readonly ILogger _logger;
 
         public WeixinMessageHandler(XDocument input,PostModel post,
                                     OssOption ossoption,
                                     BaiduApiOption baiduapiOption,
-                                    BaiYeContext baiyecontext):base(input,post)
+                                    BaiYeContext baiyecontext,ILogger logger):base(input,post)
         {
             service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext);
+            _logger = logger;
         }
 
         private BaiYeMapService service;
-        //private static ReturnInfo info = new ReturnInfo();
+        private static ReturnInfo info = new ReturnInfo();
 
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
@@ -47,7 +49,9 @@ namespace shanghaiwalk.weixin
             StringBuilder stringBuilder = new StringBuilder();
             try
             {
+                
                 string content = requestMessage.Content;
+                _logger.LogInformation($"微信用户输入:{content}");
                 if (!content.Contains("x"))
                 {
                     if (content == "help" || content == "?")
@@ -65,13 +69,13 @@ namespace shanghaiwalk.weixin
                         BaiYeMapItem mapInfo = this.service.GetMapInfo(content, usehpic);
                         if (mapInfo != null )
                         {
-                            //ResponseMessageNews mapItemShow = info.GetMapItemShow(mapInfo, requestMessage);
-                            //if (mapItemShow != null)
-                            //{
-                            //    UserInfoContext.Set(requestMessage.FromUserName, mapInfo);
-                            //    IResponseMessageBase result = mapItemShow;
-                            //    return result;
-                            //}
+                            ResponseMessageNews mapItemShow = info.GetMapItemShow(mapInfo, requestMessage);
+                            if (mapItemShow != null)
+                            {
+                                //UserInfoContext.Set(requestMessage.FromUserName, mapInfo);
+                                IResponseMessageBase result = mapItemShow;
+                                return result;
+                            }
                             stringBuilder.Append("未找到地图，望见谅。建议输入关键词为详细的地名，包含门牌号或者专有地名等，会提高查询的成功率");
                         }
                         else
@@ -106,10 +110,10 @@ namespace shanghaiwalk.weixin
         {
              BaiYeMapItem mapInfo = this.service.GetMapInfo("来自用户提交的位置", Convert.ToSingle(requestMessage.Location_Y.ToString()), Convert.ToSingle(requestMessage.Location_X.ToString()), false);
             StringBuilder stringBuilder = new StringBuilder();
-            //if (mapInfo != null )
-            //{
-            //    return info.GetMapItemShow(mapInfo.Result, requestMessage);
-            //}
+            if (mapInfo != null)
+            {
+                return info.GetMapItemShow(mapInfo, requestMessage);
+            }
             stringBuilder.Append("未找到地图，望见谅。建议输入关键词为详细的地名，包含门牌号或者专有地名等，会提高查询的成功率");
             ResponseMessageText expr_6D = base.CreateResponseMessage<ResponseMessageText>();
             expr_6D.Content = stringBuilder.ToString();

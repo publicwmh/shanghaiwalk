@@ -11,6 +11,7 @@ using shanghaiwalk.option;
 using shanghaiwalk.weixin;
 using System.IO;
 using Senparc.Weixin.XmlUtility;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,15 +23,18 @@ namespace shanghaiwalk.Controllers
         private readonly OssOption ossOption;
         private readonly BaiduApiOption baiduapiOption;
         private readonly BaiYeContext _baiyecontext;
+        private readonly ILogger _logger;
         public WeixinController(IOptions<WeixinOption> optweixin,
                                 IOptions<OssOption> optoss,
                                 IOptions<BaiduApiOption> optbaidu,
-                               BaiYeContext baiyecontext)
+                               BaiYeContext baiyecontext,
+                               ILogger<WeixinController> logger)
         {
             weixinoption = optweixin.Value;
             ossOption = optoss.Value;
             baiduapiOption = optbaidu.Value;
             _baiyecontext = baiyecontext;
+            _logger = logger;
         }
 		[HttpGet]
 		[ActionName("Test")]
@@ -81,7 +85,8 @@ namespace shanghaiwalk.Controllers
                 this.Request.Body.CopyTo(memory);
                 memory.Seek(0, SeekOrigin.Begin);
                 var postDataDocument = XmlUtility.Convert(memory);
-                var messageHandler = new WeixinMessageHandler(postDataDocument, postModel, ossOption, baiduapiOption, _baiyecontext);//接收消息（第一步）
+                var messageHandler = new WeixinMessageHandler(postDataDocument, postModel, 
+                    ossOption, baiduapiOption, _baiyecontext,_logger);//接收消息（第一步）
 
                 messageHandler.Execute();//执行微信处理过程（第二步）
                 

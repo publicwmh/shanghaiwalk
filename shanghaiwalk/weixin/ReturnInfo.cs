@@ -22,22 +22,22 @@ namespace shanghaiwalk.weixin
 			{
 				text = "定位结果";
 			}
-			Article item2 = new Article
-			{
-				Description = "系统更新日志",
-				Title = "系统更新日志",
-				PicUrl = this.dir + "logo.png",
-				Url = this.dir + "WxSH/ReadMe/"
-			};
+			//Article item2 = new Article
+			//{
+			//	Description = "系统更新日志",
+			//	Title = "系统更新日志",
+			//	PicUrl = this.dir + "logo.png",
+			//	Url = this.dir + "WxSH/ReadMe/"
+			//};
 			arg_70_0.Articles.Add(new Article
 			{
 				Description = text,
-				PicUrl = this.dir + "logo.png",
+				PicUrl = "http://wkshanghai.oss-cn-hangzhou.aliyuncs.com/logo.png",
 				Title = text + "(->时光)",
 				Url = item.TmpPicUrl
 			});
 			//this.user.SaveUserEner(requestMessage.FromUserName, item.KeyWordId);
-			arg_70_0.Articles.Add(item2);
+			//arg_70_0.Articles.Add(item2);
 			return arg_70_0;
 		}
 	}
