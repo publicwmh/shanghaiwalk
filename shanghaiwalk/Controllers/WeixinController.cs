@@ -38,16 +38,16 @@ namespace shanghaiwalk.Controllers
         }
 		[HttpGet]
 		[ActionName("Test")]
-        public string Test(string loc){
-            return OpenCC.Converter.Trad2Simple("紹興路") + "=" + OpenCC.Converter.Trad2Simple("绍兴路");
-            //BaiYeMapService service = new BaiYeMapService(ossOption,baiduapiOption,_baiyecontext);
-            //return service.GetMapInfo("绍兴路", false);
+        public BaiYeMapItem Test(string loc){
+            // return OpenCC.Converter.Trad2Simple("紹興路") + "=" + OpenCC.Converter.Trad2Simple("绍兴路");
+            BaiYeMapService service = new BaiYeMapService(ossOption, baiduapiOption, _baiyecontext);
+            return service.GetMapInfo("绍兴路", false);
         }
-       
-		/// <summary>
-		/// 微信后台验证地址（使用Get），微信后台的“接口配置信息”的Url填写如：http://weixin.senparc.com/weixin
-		/// </summary>
-		[HttpGet]
+
+        /// <summary>
+        /// 微信后台验证地址（使用Get），微信后台的“接口配置信息”的Url填写如：http://weixin.senparc.com/weixin
+        /// </summary>
+        [HttpGet]
 		[ActionName("Index")]
 		public ActionResult Get(PostModel postModel, string echostr)
 		{

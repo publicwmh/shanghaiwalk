@@ -242,13 +242,11 @@ namespace shanghaiwalk.Baiye
 
             //download file
             var fileobject = client.GetObject(_ossoption.BucketName, "MapData/" + mapname + ext);
-
             var image = Image.FromStream(fileobject.Content);
             Bitmap bmp = null;
             if (xx == 1)
             {
                 bmp = Cut(image, 0, 0, image.Width / 2, image.Height);
-
             }
             else if (xx == 2)
             {
@@ -280,13 +278,13 @@ namespace shanghaiwalk.Baiye
         private string GenPicFromOSS( string key,string ext, long picq, Bitmap bmp)
         {
             // 查询是否已经生成
-            //var list=client.ListObjects(_ossoption.BucketName, "RAND/"+key);
-            //if (list!=null&&list.ObjectSummaries!=null)
-            //{
-            //    return list.ObjectSummaries.FirstOrDefault().Key;
-            //}
+            var list = client.ListObjects(_ossoption.BucketName, "RAND/" + key+"/");
+            if (list != null && list.ObjectSummaries != null&&list.ObjectSummaries.Count()!=0)
+            {
+                return list.ObjectSummaries.FirstOrDefault().Key;
+            }
             // 没有 则上传OSS 暂存
-            string ossfilepath = "RAND/" +key+Guid.NewGuid().ToString() + ext;
+            string ossfilepath = "RAND/" +key+"/"+Guid.NewGuid().ToString() + ext;
 
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
             ImageCodecInfo ici = null;
