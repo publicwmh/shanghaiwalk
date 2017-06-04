@@ -199,23 +199,24 @@ namespace shanghaiwalk.Baiye
   
 
         public BaiYeMapItem GetMapInfo(string adr, bool usehpic)
-        {
-            //query 是否属于专有名词
-            //var getname = helper.FindName(adr);
-            var getname = "";
-            if (!string.IsNullOrEmpty(getname))
-            {
-                adr = getname;
-            }
-            if (!adr.Contains("上海"))
-            {
-                adr = "上海市" + adr;
-            }
+        {            
+            adr = processinput(adr);
             //地址转化
             var gps = helper.GetGPS(adr);
             //og.Debug("地址转化" + adr + " " + gps.lat + " " + gps.lng);
             return GetMapInfo(adr, gps.lng, gps.lat, usehpic);
 
+        }
+
+        private static string processinput(string adr)
+        {
+            // 简繁转化：
+             adr = OpenCC.Converter.Trad2Simple(adr);
+            if (!adr.Contains("上海"))
+            {
+                adr = "上海市" + adr;
+            }
+            return adr;
         }
 
         public BaiYeMapItem GetMapInfo(string adr, float x, float y, bool usehpic)
