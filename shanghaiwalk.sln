@@ -20,6 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "script", "script", "{5A9AA8
 		script\test = script\test
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "baseimage", "baseimage", "{AC872900-A1FA-4298-A6AB-DD4D3F152E96}"
+	ProjectSection(SolutionItems) = preProject
+		baseimage\Dockerfile = baseimage\Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +41,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A9AA85C-4744-4664-B702-10699522396C} = {B9BC75B7-2198-4A59-A762-82D5C9975076}
+		{AC872900-A1FA-4298-A6AB-DD4D3F152E96} = {B9BC75B7-2198-4A59-A762-82D5C9975076}
 	EndGlobalSection
 EndGlobal
