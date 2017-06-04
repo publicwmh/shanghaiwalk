@@ -280,7 +280,7 @@ namespace shanghaiwalk.Baiye
         {
             // 查询是否已经生成
             var list=client.ListObjects(_ossoption.BucketName, key);
-            if (list.ObjectSummaries!=null)
+            if (list!=null&&list.ObjectSummaries!=null)
             {
                 return list.ObjectSummaries.FirstOrDefault().Key;
             }
