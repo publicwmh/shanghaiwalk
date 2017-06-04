@@ -238,10 +238,10 @@ namespace shanghaiwalk.Baiye
             {
                 picq = 80L;
             }
-            
+
             //download file
             var fileobject = client.GetObject(_ossoption.BucketName, "MapData/" + mapname + ext);
-           
+
             var image = Image.FromStream(fileobject.Content);
             Bitmap bmp = null;
             if (xx == 1)
@@ -265,8 +265,27 @@ namespace shanghaiwalk.Baiye
             {
                 return null;
             }
-            // 上传OSS 暂存
-            string ossfilepath = "RAND/" + Guid.NewGuid().ToString() + ext;
+            var key = (mapname + ':' + xx.ToString()).GetHashCode().ToString();
+            var url= GenPicFromOSS(key, ext, picq, bmp);
+            BaiYeMapItem item = new BaiYeMapItem();
+            item.Name = adr;
+            item.TmpPicUrl = url;
+            item.GpsLng = x;
+            item.GpsLat = y;
+            return item;
+
+        }
+
+        private string GenPicFromOSS( string key,string ext, long picq, Bitmap bmp)
+        {
+            // 查询是否已经生成
+            var list=client.ListObjects(_ossoption.BucketName, key);
+            if (list.ObjectSummaries!=null)
+            {
+                return list.ObjectSummaries.FirstOrDefault().Key;
+            }
+            // 没有 则上传OSS 暂存
+            string ossfilepath = "RAND/" +key+Guid.NewGuid().ToString() + ext;
 
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
             ImageCodecInfo ici = null;
@@ -277,25 +296,15 @@ namespace shanghaiwalk.Baiye
             }
             using (MemoryStream memory = new MemoryStream())
             {
-
                 var myEncoderParameters = new EncoderParameters(1);
                 var myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, picq);
                 myEncoderParameters.Param[0] = myEncoderParameter;
                 bmp.Save(memory, ici, myEncoderParameters);
-                memory.Seek(0, SeekOrigin.Begin);
-
-                //bug ! System.Net.RequestStream Length Not Support
+                memory.Seek(0, SeekOrigin.Begin);                
                 var put = client.PutObject(_ossoption.BucketName, ossfilepath, memory);
-                string url = _ossoption.ViewPoint + "/" + ossfilepath;
-                BaiYeMapItem item = new BaiYeMapItem();
-                item.Name = adr;
-                item.TmpPicUrl = url;
-                item.GpsLng = x;
-                item.GpsLat = y;
-                return item;
+                return  _ossoption.ViewPoint + "/" + ossfilepath;
+                
             }
-
-
         }
     }
 }
