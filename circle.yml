@@ -3,9 +3,6 @@ general:
   branches:
     only:
       - master 
-notify:
-  webhooks:
-    - url:https://cs.console.aliyun.com/hook/trigger?triggerUrl=YzAzOWE2MGRiZWQxODQ0MzI5OGI3MmU1MDRmZjIwYjkwfHdrc2hhbmdoYWktZGVmYXVsdHxyZWRlcGxveXwxOWg2a2k5MTlwNmJqfA==&secret=545479694443526171336b74626f6661c17c1cc51c341dab229ec087212980ac
 jobs:
   build:
     working_directory: ~/wksh
