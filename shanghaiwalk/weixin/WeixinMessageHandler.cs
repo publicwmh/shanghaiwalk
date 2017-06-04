@@ -80,7 +80,7 @@ namespace shanghaiwalk.weixin
                         }
                         else
                         {
-                            stringBuilder.Append("未找到地图，系统正在内测中，望见谅。如需帮助 可以输入help");
+                            stringBuilder.Append("未找到地图，系统正在内测中，望见谅。");
                         }
                     }
                 }
@@ -88,6 +88,7 @@ namespace shanghaiwalk.weixin
             catch (Exception ex)
             {
                 stringBuilder.Append("很抱歉，系统出错。" + ex.Message);
+                _logger.LogError(ex, "异常");
             }
             stringBuilder.AppendLine("\r\n#");
             responseMessageText.Content = stringBuilder.ToString();
