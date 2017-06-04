@@ -281,7 +281,7 @@ namespace shanghaiwalk.Baiye
             var list = client.ListObjects(_ossoption.BucketName, "RAND/" + key+"/");
             if (list != null && list.ObjectSummaries != null&&list.ObjectSummaries.Count()!=0)
             {
-                return list.ObjectSummaries.FirstOrDefault().Key;
+                return _ossoption.ViewPoint+"/" +list.ObjectSummaries.FirstOrDefault().Key;
             }
             // 没有 则上传OSS 暂存
             string ossfilepath = "RAND/" +key+"/"+Guid.NewGuid().ToString() + ext;
