@@ -38,10 +38,10 @@ namespace shanghaiwalk.Controllers
         }
 		[HttpGet]
 		[ActionName("Test")]
-        public BaiYeMapItem Test(string loc){
+        public async Task<BaiYeMapItem> Test(string loc){
             // return OpenCC.Converter.Trad2Simple("紹興路") + "=" + OpenCC.Converter.Trad2Simple("绍兴路");
-            BaiYeMapService service = new BaiYeMapService(ossOption, baiduapiOption, _baiyecontext);
-            return service.GetMapInfo("绍兴路", false);
+            BaiYeMapService service = new BaiYeMapService(ossOption, baiduapiOption, _baiyecontext,_logger);
+            return await service.GetMapInfo("绍兴路", false);
         }
 
         /// <summary>

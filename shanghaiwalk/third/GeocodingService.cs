@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+
 namespace shanghaiwalk.third
 {
 	public class GeocodingService
@@ -8,10 +10,10 @@ namespace shanghaiwalk.third
 		}
 		public static readonly Uri BaiduApiUrl =
 			new Uri("http://api.map.baidu.com/geocoder/v2/");
-		public static BaiduGeocodingResponse GetBaiduResponse(BaiduGeocodingRequest request)
+		public static async Task<BaiduGeocodingResponse> GetBaiduResponseAsync(BaiduGeocodingRequest request)
 		{
 			var url = new Uri(BaiduApiUrl, request.ToUri());
-			return Http.Get(url).As<BaiduGeocodingResponse>();
+			return await Http.Get(url).As<BaiduGeocodingResponse>();
 		}
 	}
 }

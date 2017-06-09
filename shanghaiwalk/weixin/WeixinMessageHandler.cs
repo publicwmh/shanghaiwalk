@@ -28,8 +28,9 @@ namespace shanghaiwalk.weixin
                                     BaiduApiOption baiduapiOption,
                                     BaiYeContext baiyecontext,ILogger logger):base(input,post)
         {
-            service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext);
             _logger = logger;
+            service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext, _logger);
+            
         }
 
         private BaiYeMapService service;
@@ -66,7 +67,7 @@ namespace shanghaiwalk.weixin
                             return result;
                         }
                         bool usehpic = false;
-                        BaiYeMapItem mapInfo = this.service.GetMapInfo(content, usehpic);
+                        BaiYeMapItem mapInfo = this.service.GetMapInfo(content, usehpic).Result;
                         if (mapInfo != null )
                         {
                             ResponseMessageNews mapItemShow = info.GetMapItemShow(mapInfo, requestMessage);

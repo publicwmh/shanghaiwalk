@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace shanghaiwalk.third
 {
@@ -17,35 +18,29 @@ namespace shanghaiwalk.third
 			}
 			 
 			
-			public string AsString()
+			public async Task<string> AsString()
 			{
 				var output = String.Empty;
 				var g = WebRequest.Create(requestUri);
-
-                var response = g.GetResponseAsync().Result;
-
+                var response = await g.GetResponseAsync();
 				using (var reader = new StreamReader(response.GetResponseStream()))
 				{
 					output = reader.ReadToEnd();
-
-				}
-				 
-
-				return output;
+                    return output;
+                }		 
 			}
 
-			public T As<T>() where T : class
+			public async Task<T> As<T>() where T : class
 			{
 				T output = null;
-
-				using (var stringReader = new StringReader(AsString()))
+                var str = await AsString();
+				using (var stringReader = new StringReader(str))
 				{
 					var jsonReader = new JsonTextReader(stringReader);
 					var serializer = new JsonSerializer();
 					//serializer.Converters.Add(new JsonEnumTypeConverter());
 					output = serializer.Deserialize<T>(jsonReader);
 				}
-
 				return output;
 			}
 		}

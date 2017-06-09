@@ -8,6 +8,8 @@ using shanghaiwalk.model;
 using shanghaiwalk.option;
 using shanghaiwalk.third;
 using Aliyun.OSS;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace shanghaiwalk.Baiye
 {
@@ -18,12 +20,17 @@ namespace shanghaiwalk.Baiye
         static LocationHelper helper;
         private OssOption _ossoption;
         private BaiYeContext _baiyecontext;
+        private readonly ILogger _logger;
         
-        public BaiYeMapService(OssOption ossoption, BaiduApiOption baiduapiOption, BaiYeContext baiyecontent)
+        public BaiYeMapService(OssOption ossoption, 
+            BaiduApiOption baiduapiOption,
+            BaiYeContext baiyecontent,
+            ILogger logger)
         {
             helper = new LocationHelper(baiduapiOption);
             _ossoption = ossoption;
             _baiyecontext = baiyecontent;
+            _logger = logger;
             client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
         }
 
@@ -120,15 +127,7 @@ namespace shanghaiwalk.Baiye
             semiTransBrush.Dispose();
 
         }
-        public class JudeItem
-        {
-            public int xx { get; set; }
-            public double judev { get; set; }
-            public double d1 { get; set; }
-            public double d2 { get; set; }
-            public double d { get; set; }
-            public string key { get; set; }
-        }
+  
         /// <summary>
         /// Calculates the distance.
         /// </summary>
@@ -198,12 +197,13 @@ namespace shanghaiwalk.Baiye
         }
   
 
-        public BaiYeMapItem GetMapInfo(string adr, bool usehpic)
-        {            
+        public async Task<BaiYeMapItem> GetMapInfo(string adr, bool usehpic)
+        {          
+            //处理输入的文本
             adr = processinput(adr);
             //地址转化
-            var gps = helper.GetGPS(adr);
-            //og.Debug("地址转化" + adr + " " + gps.lat + " " + gps.lng);
+            var gps =await helper.GeoLoc2GPS(adr);
+            _logger.LogInformation($"地址转化:{gps.lat}-{gps.lng}");
             return GetMapInfo(adr, gps.lng, gps.lat, usehpic);
 
         }
@@ -212,10 +212,6 @@ namespace shanghaiwalk.Baiye
         {
             // 简繁转化：
              adr = OpenCC.Converter.Trad2Simple(adr);
-            if (!adr.Contains("上海"))
-            {
-                adr = "上海市" + adr;
-            }
             return adr;
         }
 
@@ -227,7 +223,7 @@ namespace shanghaiwalk.Baiye
             {
                 return null;
             }
-
+            _logger.LogInformation($"找到地图:{mapname}");
             string ext = ".jpg";
             long picq = 10L;
             if (mapname.Contains("上册"))
@@ -264,6 +260,7 @@ namespace shanghaiwalk.Baiye
             {
                 return null;
             }
+            _logger.LogInformation($"找到地图部分:{xx}(1左2右3左4右)");
             var key = (mapname + ':' + xx.ToString()).GetHashCode().ToString();
             var url= GenPicFromOSS(key, ext, picq, bmp);
             BaiYeMapItem item = new BaiYeMapItem();
@@ -271,6 +268,7 @@ namespace shanghaiwalk.Baiye
             item.TmpPicUrl = url;
             item.GpsLng = x;
             item.GpsLat = y;
+            _logger.LogInformation($"地图图片:{url}");
             return item;
 
         }

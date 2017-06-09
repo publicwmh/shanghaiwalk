@@ -1,5 +1,6 @@
 ﻿using System;
 using shanghaiwalk.option;
+using System.Threading.Tasks;
 
 namespace shanghaiwalk.third
 {
@@ -12,24 +13,20 @@ namespace shanghaiwalk.third
 		}
 		
 
-		public BaiduLocation GetGPS(string addr)
+		public async Task<BaiduLocation> GeoLoc2GPS(string addr)
 		{
 			BaiduLocation re = new BaiduLocation();
 			var request = new BaiduGeocodingRequest();
             request.address = addr;
 			request.ak = ak;
-			var response = GeocodingService.GetBaiduResponse(request);
-
+            request.city = "上海市";
+			var response =await GeocodingService.GetBaiduResponseAsync(request);
 			if (response.result != null)
 			{
 				var relist = BaiduAPI.ConvertToGPS(response.result.location.lat.ToString(), response.result.location.lng.ToString());
-
 				re.lat = 2 * response.result.location.lat - (float)relist[0].gps_lat;
 				re.lng = 2 * response.result.location.lng - (float)relist[0].gps_lon;
-
-
 				return re;
-
 			}
 			else
 			{
@@ -37,17 +34,5 @@ namespace shanghaiwalk.third
 			}
 		}
 
-		//      public string FindName(string adr)
-		//      {
-		//          var r = session.QueryOver<heritagesh>().Where(p => p.oldname == adr).SingleOrDefault();
-		//          if (r != null)
-		//          {
-		//              return r.adr;
-		//          }
-		//          else
-		//          {
-		//              return "";
-		//          }
-		//      }
 	}
 }
