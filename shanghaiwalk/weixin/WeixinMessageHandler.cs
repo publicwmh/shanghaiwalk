@@ -84,7 +84,7 @@ namespace shanghaiwalk.weixin
                         }
                         else
                         {
-                            stringBuilder.Append("未找到地图，系统正在内测中，望见谅。");
+                            stringBuilder.Append("未找到地图。来帮助我们完善数据库请<a href=\"http://wk.kwok.io/poi/newpoi\">点击</a>，");
                         }
                     }
                 }
