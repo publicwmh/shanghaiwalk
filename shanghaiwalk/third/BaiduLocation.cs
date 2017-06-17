@@ -36,8 +36,8 @@ namespace shanghaiwalk.third
     }
     public class BaiduLocation
     {
-        public float lat { get; set; }
-        public float lng { get; set; }
+        public double lat { get; set; }
+        public double lng { get; set; }
     }
 
     public class BaiduGeocodingRequest

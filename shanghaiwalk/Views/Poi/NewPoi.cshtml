@@ -1,0 +1,164 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="http://cdn.bootcss.com/twitter-bootstrap/2.0.4/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+            font-size: 14px;
+        }
+
+        #l-map {
+            height: 300px;
+            width: 100%;
+        }
+
+        #r-result {
+            width: 100%;
+        }
+        #target {
+            min-height: 200px;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2b95f7d23667b070725c8c44e05f5fdb"></script>
+    <title>添加新的POI</title>
+</head>
+<body>
+    <div id="l-map"></div>
+    <div id="r-result">我们的新POI在哪里:<input type="text" class="form-control" id="suggestId" size="20" value="" /></div>
+    <div id="searchResultPanel" style="border:1px solid #C0C0C0;width:150px;height:auto; display:none;"></div>
+    <div>当前地图中心点坐标为(<a id="lat"></a>,<a id="lng"></a>)</div>
+    <form class="form-horizontal" id="target">
+        <fieldset>
+            <div id="legend" class="">
+                <legend class="">POI 信息</legend>
+            </div>
+
+
+            <div class="control-group">
+
+                <!-- Text input-->
+                <label class="control-label" for="input01">名称</label>
+                <div class="controls">
+                    <input type="text" placeholder="请输入名称" class="input">
+                    <p class="help-block">最好是专有地名，可以是旧名</p>
+                </div>
+            </div>
+
+            <div class="control-group">
+
+                <!-- Textarea -->
+                <label class="control-label">同义词</label>
+                <div class="controls">
+                    <div class="textarea">
+                        <textarea type="" class=""> </textarea>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="control-group">
+
+                <!-- Textarea -->
+                <label class="control-label">介绍和描述</label>
+                <div class="controls">
+                    <div class="textarea">
+                        <textarea type="" class=""> </textarea>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="control-group">
+                <label class="control-label"></label>
+
+                <!-- Button -->
+                <div class="controls">
+                    <button class="btn btn-success">保存</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+</body>
+</html>
+<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script type="text/javascript">
+    // 百度地图API功能
+    function G(id) {
+        return document.getElementById(id);
+    }
+
+    var map = new BMap.Map("l-map");
+    map.centerAndZoom("上海", 12);                   // 初始化地图,设置城市和地图级别。
+
+    var ac = new BMap.Autocomplete(    //建立一个自动完成的对象
+        {
+            "input": "suggestId"
+            , "location": map
+        });
+
+    ac.addEventListener("onhighlight", function (e) {  //鼠标放在下拉列表上的事件
+        var str = "";
+        var _value = e.fromitem.value;
+        var value = "";
+        if (e.fromitem.index > -1) {
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str = "FromItem<br />index = " + e.fromitem.index + "<br />value = " + value;
+
+        value = "";
+        if (e.toitem.index > -1) {
+            _value = e.toitem.value;
+            value = _value.province + _value.city + _value.district + _value.street + _value.business;
+        }
+        str += "<br />ToItem<br />index = " + e.toitem.index + "<br />value = " + value;
+        G("searchResultPanel").innerHTML = str;
+    });
+    map.addEventListener("dragend", updateCenter);
+
+    var myValue;
+    ac.addEventListener("onconfirm", function (e) {    //鼠标点击下拉列表后的事件
+        var _value = e.item.value;
+        myValue = _value.province + _value.city + _value.district + _value.street + _value.business;
+        G("searchResultPanel").innerHTML = "onconfirm<br />index = " + e.item.index + "<br />myValue = " + myValue;
+
+        setPlace();
+        updateCenter();
+    });
+
+    function setPlace() {
+        map.clearOverlays();    //清除地图上所有覆盖物
+        function myFun() {
+            var pp = local.getResults().getPoi(0).point;    //获取第一个智能搜索的结果
+            map.centerAndZoom(pp, 18);
+            map.addOverlay(new BMap.Marker(pp));    //添加标注
+        }
+        var local = new BMap.LocalSearch(map, { //智能搜索
+            onSearchComplete: myFun
+        });
+        local.search(myValue);
+    }
+   
+    function updateCenter() { 
+        $("#lat").text(map.getCenter().lat);
+        $("#lng").text(map.getCenter().lng);
+    }
+    
+</script>
+

@@ -21,17 +21,20 @@ namespace shanghaiwalk.Baiye
         private OssOption _ossoption;
         private BaiYeContext _baiyecontext;
         private readonly ILogger _logger;
-        
+        private POIService POIService;
+
         public BaiYeMapService(OssOption ossoption, 
             BaiduApiOption baiduapiOption,
             BaiYeContext baiyecontent,
-            ILogger logger)
+            ILogger logger,
+            POIService poiservice)
         {
             helper = new LocationHelper(baiduapiOption);
             _ossoption = ossoption;
             _baiyecontext = baiyecontent;
             _logger = logger;
             client = new OssClient(ossoption.Endpoint, ossoption.AccessKeyId, ossoption.AccessKeySecret);
+            POIService = poiservice;
         }
 
         /// <summary>
@@ -201,10 +204,22 @@ namespace shanghaiwalk.Baiye
         {          
             //处理输入的文本
             adr = processinput(adr);
-            //地址转化
-            var gps =await helper.GeoLoc2GPS(adr);
-            _logger.LogInformation($"地址转化:{gps.lat}-{gps.lng}");
-            return GetMapInfo(adr, gps.lng, gps.lat, usehpic);
+            //先进行POI查询，如果是转悠地名则 不需要转化GPS
+            var poi = POIService.GetPoiByName(adr);
+            if (poi != null)
+            {
+               
+                return GetMapInfoByGPS(adr, poi.GpsLng, poi.GpsLat, usehpic);
+            }
+            else {
+                //地址转化
+                var gps = await helper.GeoLoc2GPS(adr);
+                _logger.LogInformation($"地址转化:{gps.lat}-{gps.lng}");
+                return GetMapInfoByGPS(adr, gps.lng, gps.lat, usehpic);
+            }
+
+
+          
 
         }
 
@@ -215,7 +230,7 @@ namespace shanghaiwalk.Baiye
             return adr;
         }
 
-        public BaiYeMapItem GetMapInfo(string adr, float x, float y, bool usehpic)
+        public BaiYeMapItem GetMapInfoByGPS(string adr, double x, double y, bool usehpic)
         {
             int xx = 0;
             var mapname = FindMap(y, x, out xx);

@@ -29,11 +29,14 @@ namespace shanghaiwalk.weixin
                                     BaiYeContext baiyecontext,ILogger logger):base(input,post)
         {
             _logger = logger;
-            service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext, _logger);
+            POIService = new POIService(baiyecontext, _logger);
+            service = new BaiYeMapService(ossoption,baiduapiOption,baiyecontext, _logger, POIService);
+            
             
         }
 
         private BaiYeMapService service;
+        private POIService POIService;
         private static ReturnInfo info = new ReturnInfo();
 
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
@@ -110,7 +113,7 @@ namespace shanghaiwalk.weixin
 
         public override IResponseMessageBase OnLocationRequest(RequestMessageLocation requestMessage)
         {
-             BaiYeMapItem mapInfo = this.service.GetMapInfo("来自用户提交的位置", Convert.ToSingle(requestMessage.Location_Y.ToString()), Convert.ToSingle(requestMessage.Location_X.ToString()), false);
+             BaiYeMapItem mapInfo = this.service.GetMapInfoByGPS("来自用户提交的位置", Convert.ToSingle(requestMessage.Location_Y.ToString()), Convert.ToSingle(requestMessage.Location_X.ToString()), false);
             StringBuilder stringBuilder = new StringBuilder();
             if (mapInfo != null)
             {
