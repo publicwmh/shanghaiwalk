@@ -214,6 +214,7 @@ namespace shanghaiwalk.Baiye
             else {
                 //地址转化
                 var gps = await helper.GeoLoc2GPS(adr);
+                if (gps == null) return null;
                 _logger.LogInformation($"地址转化:{gps.lat}-{gps.lng}");
                 return GetMapInfoByGPS(adr, gps.lng, gps.lat, usehpic);
             }
