@@ -209,7 +209,7 @@ namespace shanghaiwalk.Baiye
             if (poi != null)
             {
                
-                return GetMapInfoByGPS(adr, poi.GpsLng, poi.GpsLat, usehpic);
+                return GetMapInfoByGPS(adr, poi.gpsLng, poi.gpsLat, usehpic);
             }
             else {
                 //地址转化
