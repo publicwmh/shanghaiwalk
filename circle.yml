@@ -41,8 +41,5 @@ jobs:
               docker tag kwok/wkshanghai:$TAG registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:1.0
               docker push registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:$TAG
               docker push registry.cn-hangzhou.aliyuncs.com/kwok/wkshanghai:1.0
+              curl https://cs.console.aliyun.com/hook/trigger?triggerUrl=YzAzOWE2MGRiZWQxODQ0MzI5OGI3MmU1MDRmZjIwYjkwfHdrc2hhbmdoYWktZGVmYXVsdHxyZWRlcGxveXwxOWk3Z2lhcmVoY29vfA==&secret=797530533571787642644d345052686233c51f6351785115abf934ec87cdf77f
             fi
-      - run: 
-          name: trigger
-          command:|
-            curl https://cs.console.aliyun.com/hook/trigger?triggerUrl=YzAzOWE2MGRiZWQxODQ0MzI5OGI3MmU1MDRmZjIwYjkwfHdrc2hhbmdoYWktZGVmYXVsdHxyZWRlcGxveXwxOWk3Z2lhcmVoY29vfA==&secret=797530533571787642644d345052686233c51f6351785115abf934ec87cdf77f
