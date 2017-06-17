@@ -4,7 +4,7 @@ using shanghaiwalk.Baiye;
 
 namespace shanghaiwalk.weixin
 {
-	public class ReturnInfo
+	public class ReturnMessageBuilder
 	{
 		private string dir = "";
 
@@ -22,13 +22,6 @@ namespace shanghaiwalk.weixin
 			{
 				text = "定位结果";
 			}
-			//Article item2 = new Article
-			//{
-			//	Description = "系统更新日志",
-			//	Title = "系统更新日志",
-			//	PicUrl = this.dir + "logo.png",
-			//	Url = this.dir + "WxSH/ReadMe/"
-			//};
 			arg_70_0.Articles.Add(new Article
 			{
 				Description = text,
@@ -36,9 +29,20 @@ namespace shanghaiwalk.weixin
 				Title = text + "(->时光)",
 				Url = item.TmpPicUrl
 			});
-			//this.user.SaveUserEner(requestMessage.FromUserName, item.KeyWordId);
-			//arg_70_0.Articles.Add(item2);
-			return arg_70_0;
+            //this.user.SaveUserEner(requestMessage.FromUserName, item.KeyWordId);
+            
+            if (item.POIKey != 0) {
+
+                var item2 = new Article
+                {
+                    Description = text,
+                    PicUrl = "http://wkshanghai.oss-cn-hangzhou.aliyuncs.com/logo.png",
+                    Title = text + "介绍",
+                    Url = "http://wk.kwok.io/poi/info/"+item.POIKey.ToString()
+                };
+                arg_70_0.Articles.Add(item2);
+            }
+            return arg_70_0;
 		}
 	}
 }

@@ -37,7 +37,7 @@ namespace shanghaiwalk.weixin
 
         private BaiYeMapService service;
         private POIService POIService;
-        private static ReturnInfo info = new ReturnInfo();
+        private static ReturnMessageBuilder build = new ReturnMessageBuilder();
 
         public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
         {
@@ -73,7 +73,7 @@ namespace shanghaiwalk.weixin
                         BaiYeMapItem mapInfo = this.service.GetMapInfo(content, usehpic).Result;
                         if (mapInfo != null )
                         {
-                            ResponseMessageNews mapItemShow = info.GetMapItemShow(mapInfo, requestMessage);
+                            ResponseMessageNews mapItemShow = build.GetMapItemShow(mapInfo, requestMessage);
                             if (mapItemShow != null)
                             {
                                 //UserInfoContext.Set(requestMessage.FromUserName, mapInfo);
@@ -117,7 +117,7 @@ namespace shanghaiwalk.weixin
             StringBuilder stringBuilder = new StringBuilder();
             if (mapInfo != null)
             {
-                return info.GetMapItemShow(mapInfo, requestMessage);
+                return build.GetMapItemShow(mapInfo, requestMessage);
             }
             stringBuilder.Append("未找到地图，望见谅。建议输入关键词为详细的地名，包含门牌号或者专有地名等，会提高查询的成功率");
             ResponseMessageText expr_6D = base.CreateResponseMessage<ResponseMessageText>();

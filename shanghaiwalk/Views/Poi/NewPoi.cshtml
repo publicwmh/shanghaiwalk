@@ -61,7 +61,7 @@
                 <!-- Text input-->
                 <label class="control-label" for="input01">名称</label>
                 <div class="controls">
-                    <input type="text" placeholder="请输入名称" class="input">
+                    <input type="text" id="name" placeholder="请输入名称" class="input">
                     <p class="help-block">最好是专有地名，可以是旧名</p>
                 </div>
             </div>
@@ -72,7 +72,7 @@
                 <label class="control-label">同义词</label>
                 <div class="controls">
                     <div class="textarea">
-                        <textarea type="" class=""> </textarea>
+                        <textarea type="" class="" id="samename"> </textarea>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 <label class="control-label">介绍和描述</label>
                 <div class="controls">
                     <div class="textarea">
-                        <textarea type="" class=""> </textarea>
+                        <textarea type="" class="" id="content"> </textarea>
                     </div>
                 </div>
             </div>
@@ -97,7 +97,7 @@
 
                 <!-- Button -->
                 <div class="controls">
-                    <button class="btn btn-success">保存</button>
+                    <button id="save" class="btn btn-success">保存</button>
                 </div>
             </div>
 
@@ -168,6 +168,21 @@
         $("#lat").text(map.getCenter().lat);
         $("#lng").text(map.getCenter().lng);
     }
+
+    $("#save").on("click", function () {
+
+        //ajax
+        var poi = {
+            name: $("#name").val(),
+            samename: $("#samename").val(),
+            gpslat: $("#lat").text(),
+            gpslng: $("#lng").text(),
+            content: $("#content").val()
+        }
+        $.post("/poi/savepoi", poi, function (result) { 
+            alter("提交成功");
+        });
+     })
     
 </script>
 

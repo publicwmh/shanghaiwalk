@@ -209,7 +209,7 @@ namespace shanghaiwalk.Baiye
             if (poi != null)
             {
                
-                return GetMapInfoByGPS(adr, poi.gpslng, poi.gpslat, usehpic);
+                return GetMapInfoByGPS(adr, poi.gpslng, poi.gpslat, usehpic,poi);
             }
             else {
                 //地址转化
@@ -217,9 +217,6 @@ namespace shanghaiwalk.Baiye
                 _logger.LogInformation($"地址转化:{gps.lat}-{gps.lng}");
                 return GetMapInfoByGPS(adr, gps.lng, gps.lat, usehpic);
             }
-
-
-          
 
         }
 
@@ -230,7 +227,7 @@ namespace shanghaiwalk.Baiye
             return adr;
         }
 
-        public BaiYeMapItem GetMapInfoByGPS(string adr, double x, double y, bool usehpic)
+        public BaiYeMapItem GetMapInfoByGPS(string adr, double x, double y, bool usehpic,POI poi=null)
         {
             int xx = 0;
             var mapname = FindMap(y, x, out xx);
@@ -283,6 +280,7 @@ namespace shanghaiwalk.Baiye
             item.TmpPicUrl = url;
             item.GpsLng = x;
             item.GpsLat = y;
+            item.POIKey = poi==null?0:poi.id;
             _logger.LogInformation($"地图图片:{url}");
             return item;
 

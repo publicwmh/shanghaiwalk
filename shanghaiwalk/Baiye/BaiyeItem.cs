@@ -10,6 +10,6 @@ namespace shanghaiwalk.Baiye
 		public int Good { get; set; }
 		public int Bad { get; set; }
 		public string Content { get; set; }
-		public string POIKey { get; set; }
+		public long POIKey { get; set; }
 	}
 }

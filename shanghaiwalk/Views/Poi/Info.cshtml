@@ -1,0 +1,81 @@
+﻿
+@{
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="http://cdn.bootcss.com/twitter-bootstrap/2.0.4/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+            font-size: 14px;
+        }
+
+        .form-horizontal .control-label {
+            float: left;
+            width: 40px;
+            padding-top: 5px;
+            text-align: right;
+        }
+
+        .form-horizontal .controls {
+            margin-left: 70px;
+        }
+
+      
+    </style>
+    <title>@Model.name</title>
+</head>
+<body>
+  
+    <form class="form-horizontal" id="target">
+        <fieldset>
+            <div id="legend" class="">
+                <legend class="">POI 信息</legend>
+            </div>
+
+
+            <div class="control-group">
+
+                <!-- Text input-->
+                <label class="control-label" for="input01">名称</label>
+                <div class="controls">
+                    @Model.name
+                </div>
+            </div>
+
+            <div class="control-group">
+
+                <!-- Textarea -->
+                <label class="control-label">同义词</label>
+                <div class="controls">
+                    @Model.samename
+                </div>
+            </div>
+
+
+
+            <div class="control-group">
+
+                <!-- Textarea -->
+                <label class="control-label">介绍和描述</label>
+                <div class="controls">
+                   @Model.content
+                </div>
+            </div>
+
+
+        </fieldset>
+    </form>
+
+</body>
+</html>
+
+
+
