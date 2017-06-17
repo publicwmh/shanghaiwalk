@@ -80,7 +80,7 @@ namespace shanghaiwalk.weixin
                                 IResponseMessageBase result = mapItemShow;
                                 return result;
                             }
-                            stringBuilder.Append("未找到地图，望见谅。建议输入关键词为详细的地名，包含门牌号或者专有地名等，会提高查询的成功率");
+                            stringBuilder.Append("未找到地图，望见谅。帮助我们完善数据库请<a href=\"http://wk.kwok.io/poi/newpoi\">点击</a>，");
                         }
                         else
                         {

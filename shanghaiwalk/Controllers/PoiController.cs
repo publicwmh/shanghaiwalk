@@ -41,10 +41,15 @@ namespace shanghaiwalk.Controllers
         [HttpPost]
         public string SavePoi(PoiDto input)
         {
+
+            //查询name
+            var poi= _baiyecontext.POIs.Where(p => p.name == input.name).FirstOrDefault();
+            if (poi==null)
+            {
+               poi = new POI();
+            }
             //转换百度地址为GPS
             var regps = _locheper.Convert2GPS(input.gpslat, input.gpslng);
-
-            POI poi = new POI();
             poi.id = new IdWorker(1,1).NextId();
             poi.name = input.name;
             poi.samename = input.samename;
@@ -54,6 +59,12 @@ namespace shanghaiwalk.Controllers
             _baiyecontext.POIs.Add(poi);
             _baiyecontext.SaveChanges();
             return "OK";
+        }
+
+        public poistat Stat()
+        {
+            var count = _baiyecontext.POIs.Count();
+            return new poistat() { allcount = count };
         }
     }
 }
