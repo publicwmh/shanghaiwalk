@@ -13,12 +13,14 @@ namespace shanghaiwalk
 
 		public DbSet<BaiyeBookPage> BaiYeBookPages { get; set; }
         public DbSet<POI> POIs { get; set; }
+        public DbSet<QueryHis> QueryHiss { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<BaiyeBookPage>().ToTable("baiyebookpage");
             modelBuilder.Entity<POI>().ToTable("poi");
+            modelBuilder.Entity<QueryHis>().ToTable("queryhis");
         }
 	}
 }
